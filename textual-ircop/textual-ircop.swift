@@ -43,6 +43,11 @@ func =~ (input: String, pattern: String) -> [String]? {
 
 class TPI_IRCopPlugin: NSObject, THOPluginProtocol
 {
+    /*
+        TODO: I dislike how this file/path is hardcoded and named.  I'd like to get more elaborate
+            in the future.  Possibly support multiple filter files, configured through the GUI.  Maybe.
+    */
+
     let dataFile = NSHomeDirectory().stringByAppendingPathComponent("Documents/DALnetFilters.data");
     var filterExpressions = [String:String]()
     
@@ -56,9 +61,11 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
             self.filterExpressions =  [String: String]()
             
             for l in lines {
-                var tmpString = l.componentsSeparatedByString("🐶") as [String]; //Yes, we're using a dog to tokenize.
-                if (tmpString.count == 2) {
-                    self.filterExpressions[tmpString[0]] = tmpString[1];
+                if (!l.hasPrefix("#")) {
+                    var tmpString = l.componentsSeparatedByString("🐶") as [String]; //Yes, we're using a dog to tokenize.
+                    if (tmpString.count == 2) {
+                        self.filterExpressions[tmpString[0]] = tmpString[1];
+                    }
                 }
             }
             self.writeToWindow(client, text: "Reloading \(self.dataFile)")
@@ -86,28 +93,6 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         return ["notice"]
     }
     
-    /* We can't halt with this.  Use interceptServerInput instead.
-    
-    
-    func messageReceivedByServer(client :IRCClient, sender: NSDictionary, message: NSDictionary)
-    //func didReceiveServerInputOnClient(client :IRCClient, sender: NSDictionary, message: NSDictionary)
-    
-    {
-    /* Swift provides a very powerful switch statement so
-    it is easier to use that for identifying commands than
-    using an if statement if more than the two are added. */
-    let commandValue = (message["messageCommand"] as String)
-    
-    switch (commandValue) {
-    //case "PRIVMSG":
-    //    self.handleIncomingPrivateMessageCommand(client, sender: sender, message: message)
-    case "NOTICE":
-    self.handleIncomingNoticeCommand(client, sender: sender, message: message)
-    default:
-    return;
-    }
-    }*/
-    
     func buildOperatorWindow(client :IRCClient) {
         //client.findChannelOrCreate("@Operator",isPrivateMessage:true)
         
@@ -124,7 +109,6 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         default:
             return input;
         }
-        //Command: NOTICE - Params: [0]: Ayukawa - [1]: *** Global -- from operhelp: There are 2 users in #operhelp waiting for assistance: cooltail Fir0wN -
     }
     
     
@@ -140,6 +124,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
             
             for (expression, result) in self.filterExpressions {
                 if var matches = messageRecieved =~ expression {
+                    if (result == "@HALT@") { return nil; }
                     
                     var formattedString = result;
                     for i in 0..<matches.count {
