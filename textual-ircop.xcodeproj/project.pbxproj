@@ -6,9 +6,17 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		7A9596971993224A0074790D /* textual-ircop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9596961993224A0074790D /* textual-ircop.swift */; };
+		7A9596991993235C0074790D /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9596981993235C0074790D /* StringUtils.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		7A5A21AD19931ECF007609CE /* textual-ircop.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "textual-ircop.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A5A21B119931ECF007609CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A959695199322490074790D /* textual-ircop-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "textual-ircop-Bridging-Header.h"; sourceTree = "<group>"; };
+		7A9596961993224A0074790D /* textual-ircop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "textual-ircop.swift"; sourceTree = "<group>"; };
+		7A9596981993235C0074790D /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -42,6 +50,9 @@
 			isa = PBXGroup;
 			children = (
 				7A5A21B019931ECF007609CE /* Supporting Files */,
+				7A9596961993224A0074790D /* textual-ircop.swift */,
+				7A9596981993235C0074790D /* StringUtils.swift */,
+				7A959695199322490074790D /* textual-ircop-Bridging-Header.h */,
 			);
 			path = "textual-ircop";
 			sourceTree = "<group>";
@@ -120,6 +131,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A9596991993235C0074790D /* StringUtils.swift in Sources */,
+				7A9596971993224A0074790D /* textual-ircop.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,7 +216,8 @@
 		7A5A21B519931ECF007609CE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "\"/Applications/Textual 5.app/Contents/MacOS/Textual 5\"";
+				BUNDLE_LOADER = "/Applications/Textual 5.app/Contents/MacOS/Textual 5";
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"/Applications/Textual 5.app/Contents/Frameworks/\"/**";
@@ -214,9 +228,12 @@
 				);
 				INFOPLIST_FILE = "textual-ircop/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "textual-ircop/textual-ircop-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
@@ -224,7 +241,8 @@
 		7A5A21B619931ECF007609CE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "\"/Applications/Textual 5.app/Contents/MacOS/Textual 5\"";
+				BUNDLE_LOADER = "/Applications/Textual 5.app/Contents/MacOS/Textual 5";
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"/Applications/Textual 5.app/Contents/Frameworks/\"/**";
@@ -235,9 +253,11 @@
 				);
 				INFOPLIST_FILE = "textual-ircop/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "textual-ircop/textual-ircop-Bridging-Header.h";
 				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
@@ -261,6 +281,7 @@
 				7A5A21B619931ECF007609CE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
