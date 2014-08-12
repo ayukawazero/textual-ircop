@@ -170,9 +170,10 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         
         if (messageRecieved.hasPrefix("***")) {   //We should be able to safely assume this is a server notice
             for of in filterArray {
-                if of.enabled.lowercaseString=="yes" {
+                let isEnabled = of.enabled.lowercaseString
+                if isEnabled == "yes" || isEnabled == "halt" {
                     if var matches = messageRecieved =~ of.expression {
-                        if of.enabled.lowercaseString == "halt" { return nil }
+                        if isEnabled == "halt" { return nil }
                         
                         var formattedString = of.format;//result;
                         for i in 0..<matches.count {
