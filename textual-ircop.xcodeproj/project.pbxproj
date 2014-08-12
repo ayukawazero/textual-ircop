@@ -7,16 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A6A6F051993C3450015A469 /* ircop-filters-config.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7A6A6F041993C3450015A469 /* ircop-filters-config.xib */; };
 		7A9596971993224A0074790D /* textual-ircop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9596961993224A0074790D /* textual-ircop.swift */; };
-		7A9596991993235C0074790D /* StringUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9596981993235C0074790D /* StringUtils.swift */; };
+		7AE49D471996A77D00D67D6D /* operfilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE49D461996A77D00D67D6D /* operfilter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7A5A21AD19931ECF007609CE /* textual-ircop.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "textual-ircop.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7A5A21B119931ECF007609CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7A6A6F041993C3450015A469 /* ircop-filters-config.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ircop-filters-config.xib"; sourceTree = "<group>"; };
 		7A959695199322490074790D /* textual-ircop-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "textual-ircop-Bridging-Header.h"; sourceTree = "<group>"; };
 		7A9596961993224A0074790D /* textual-ircop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "textual-ircop.swift"; sourceTree = "<group>"; };
-		7A9596981993235C0074790D /* StringUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringUtils.swift; sourceTree = "<group>"; };
+		7AE49D461996A77D00D67D6D /* operfilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operfilter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,8 +53,9 @@
 			children = (
 				7A5A21B019931ECF007609CE /* Supporting Files */,
 				7A9596961993224A0074790D /* textual-ircop.swift */,
-				7A9596981993235C0074790D /* StringUtils.swift */,
+				7AE49D461996A77D00D67D6D /* operfilter.swift */,
 				7A959695199322490074790D /* textual-ircop-Bridging-Header.h */,
+				7A6A6F041993C3450015A469 /* ircop-filters-config.xib */,
 			);
 			path = "textual-ircop";
 			sourceTree = "<group>";
@@ -121,6 +124,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A6A6F051993C3450015A469 /* ircop-filters-config.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,8 +135,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7A9596991993235C0074790D /* StringUtils.swift in Sources */,
 				7A9596971993224A0074790D /* textual-ircop.swift in Sources */,
+				7AE49D471996A77D00D67D6D /* operfilter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,7 +228,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Applications/Xcode6-Beta5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
-					"\"~/Projects/Textual-5/Classes/Headers/\"/**",
+					"\"/Applications/Textual 5.app/Contents/Headers/\"/**",
 				);
 				INFOPLIST_FILE = "textual-ircop/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -249,7 +253,7 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Applications/Xcode6-Beta5.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include",
-					"\"~/Projects/Textual-5/Classes/Headers/\"/**",
+					"\"/Applications/Textual 5.app/Contents/Headers/\"/**",
 				);
 				INFOPLIST_FILE = "textual-ircop/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";

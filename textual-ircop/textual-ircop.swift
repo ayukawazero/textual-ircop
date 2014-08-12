@@ -43,18 +43,56 @@ func =~ (input: String, pattern: String) -> [String]? {
 
 class TPI_IRCopPlugin: NSObject, THOPluginProtocol
 {
+    
+    @IBOutlet var ourView:NSView! = NSView()
+    func pluginPreferencesPaneView() -> (NSView)
+    {
+        if (self.ourView == nil) {
+            if (NSBundle.mainBundle().loadNibNamed("ircop-filters-config", owner: self, topLevelObjects: nil) == nil) {
+                NSLog("Unable to open preference pane")
+            }
+        }
+        return self.ourView;
+    }
+    
+    func pluginPreferencesPaneMenuItemName() ->(NSString)
+    {
+        return "IRCop Extensions"
+    }
+    
+    
+    
     /*
         TODO: I dislike how this file/path is hardcoded and named.  I'd like to get more elaborate
             in the future.  Possibly support multiple filter files, configured through the GUI.  Maybe.
     */
 
-    let dataFile = NSHomeDirectory().stringByAppendingPathComponent("Documents/DALnetFilters.data");
-    var filterExpressions = [String:String]()
+    let dataFile = NSHomeDirectory().stringByAppendingPathComponent("Documents/dalnet-filters.xml");
+    //var filterExpressions = [String:String]()
+    
+    var filterArray: [OperFilter] = []
+    
     
     
     func loadFilterSet(client :IRCClient) {
-        let fileString = String.stringWithContentsOfFile(self.dataFile, encoding: NSUTF8StringEncoding, error: nil) as String!
+        //let fileString = String.stringWithContentsOfFile(self.dataFile, encoding: NSUTF8StringEncoding, error: nil) as String!
         
+        let filterParser = SwiftXMLParser(fromFileAtPath: self.dataFile)
+        //let fileString = String.stringWithContentsOfFile(path, encoding: NSUTF8StringEncoding, error: nil) as String!
+        //println(fileString)
+        
+        filterParser.start()
+        filterArray = filterParser.getParsedItems()
+        
+        self.writeToWindow(client, text: "Loaded \(filterArray.count) filters in \(filterParser.getLastDuration()) seconds.")
+        //myParser[0]
+//        myParser.displayItems()
+        
+        
+        
+        
+        
+        /*
         if (fileString != nil) {
             let lines = fileString.componentsSeparatedByString("\n") as [String];
             
@@ -71,14 +109,35 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
             self.writeToWindow(client, text: "Reloading \(self.dataFile)")
         } else {
             self.writeToWindow(client, text: "Unable to open \(self.dataFile)")
-        }
+        }*/
     }
     
     func showFilters(client :IRCClient) {
+        for of in filterArray {
+            writeToWindow(client,text:"Expression: \(of.expression)")
+        }
+        /*
         for (regex,filter) in self.filterExpressions {
             self.writeToWindow(client,text:"Regex: \(regex) - Filter: \(filter)");
-        }
+        }*/
     }
+    
+   /*
+    - (NSView *)pluginPreferencesPaneView
+    {
+    if (self.ourView == nil) {
+    if ([NSBundle loadNibNamed:@"PreferencePane" owner:self] == NO) {
+    NSLog(@"TPI_PrefsTest: Failed to load view.");
+    }
+    }
+    
+    return self.ourView;
+    }
+    
+    - (NSString *)pluginPreferencesPaneMenuItemName
+    {
+    return @"My Test Plugin";
+    }*/
     
     
     
@@ -115,24 +174,33 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     //func handleIncomingNoticeCommand(client :IRCClient, sender: NSDictionary, message: NSDictionary)
     func handleIncomingNoticeCommand(client :IRCClient, input: IRCMessage!) -> IRCMessage!
     {
-        if (self.filterExpressions.count < 1) { self.loadFilterSet(client) }
+        if (filterArray.count < 1) { self.loadFilterSet(client) }
         var mParamString = "";
         let messageRecieved = input.paramAt(1)
         
-        if (messageRecieved.substring(0,length: 3) == "***") {
+        if (messageRecieved.hasPrefix("***")) {
+        //if (messageRecieved.substring(0,length: 3) == "***") {
             //We should be able to safely assume this is a server notice
             
-            for (expression, result) in self.filterExpressions {
-                if var matches = messageRecieved =~ expression {
-                    if (result == "@HALT@") { return nil; }
+            for of in filterArray {
+            
+            //for (expression, result) in self.filterExpressions {
+                if of.enabled.lowercaseString=="yes" {
+//                    writeToWindow(client,text:"\(messageRecieved) vs. \(of.expression)")
+                if var matches = messageRecieved =~ of.expression {
+                    if of.enabled.lowercaseString == "halt" { return nil }
                     
-                    var formattedString = result;
+                    //if (result == "@HALT@") { return nil; }
+                    
+                    var formattedString = of.format;//result;
                     for i in 0..<matches.count {
-                        formattedString = formattedString.stringByReplacingOccurrencesOfString("@MATCH_\(i)@", withString: matches[i], options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+                        
+                        formattedString = formattedString.stringByReplacingOccurrencesOfString("@M_\(i)@", withString: matches[i], options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
+                        
                     }
                     
                     //Apparently we need to process colors by hand.
-                    let uCodes: [String: String] = ["@BOLD@": "\u{0002}", "@ITALIC@": "\u{001D}", "@UNDERLINE@": "\u{001F}", "@COLOR@": "\u{0003}"]
+                    let uCodes: [String: String] = /*["@BOLD@": "\u{0002}", "@ITALIC@": "\u{001D}", "@UNDERLINE@": "\u{001F}", "@COLOR@": "\u{0003}",*/ ["@B@": "\u{0002}", "@I@": "\u{001D}", "@U@": "\u{001F}", "@C@": "\u{0003}"]
                     
                     for (at,uc) in uCodes {
                         formattedString = formattedString.stringByReplacingOccurrencesOfString(at, withString:uc, options: NSStringCompareOptions.LiteralSearch, range:nil)
@@ -142,7 +210,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
                     
                     return nil; //We've handled the notice, Textual doesn't need to process it further.
                 }
-                
+                }
             }
             
         }
