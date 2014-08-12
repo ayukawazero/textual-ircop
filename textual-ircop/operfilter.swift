@@ -67,7 +67,6 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     }
     
     func finishedCurrentItem() {
-        println("Finished Item")
         self.parsedItems.append(currentItem! as OperFilter)  // keep track of parsed filters
     }
     
@@ -78,13 +77,12 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     }
     
     func parserDidEndDocument(parser: NSXMLParser!) {
-        println("End of Document")
         self.done = true
         self.lastDuration = NSDate.timeIntervalSinceReferenceDate() - startTime
     }
     
     func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
-        println("Parsing Start \(elementName)")
+
         if elementName == "filter" {
             currentItem = OperFilter()
             if let enabled = attributeDict["enabled"] as? NSString {
@@ -109,7 +107,6 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     }
     
     func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
-        println("Parsing End \(elementName)")
         
         if let item = currentItem? {                            // I would like to make an abstract version of this
             if elementName == "filter" {
