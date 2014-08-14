@@ -47,7 +47,10 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         TODO: I dislike how this file/path is hardcoded and named.  I'd like to get more elaborate
         in the future.  Possibly support multiple filter files, configured through the GUI.  Maybe.
     */
-    let dataFile = NSHomeDirectory().stringByAppendingPathComponent("Documents/dalnet-filters.xml");
+    
+    
+    let dataPath = TPCPathInfo.customExtensionFolderPath()
+    let dataFile = ("dalnet-filters.xml")
     
     var filterArray: [OperFilter] = []
 
@@ -73,7 +76,8 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     */
     func pluginPreferencesPaneView() ->(NSView)
     {
-        return self.ourView!
+        if (self.ourView == nil) { return NSView() }
+        else { return self.ourView! }
     }
     
     
@@ -90,7 +94,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         Open and parse the XML configuration file, placing the results into filterArray
     */
     func loadFilterSet(client :IRCClient) {
-        let filterParser = SwiftXMLParser(fromFileAtPath: self.dataFile)
+        let filterParser = SwiftXMLParser(fromFileAtPath: "\(dataPath)/\(dataFile)")
         
         filterParser.start()
         filterArray = filterParser.getParsedItems()
