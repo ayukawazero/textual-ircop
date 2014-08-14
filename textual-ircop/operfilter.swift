@@ -6,6 +6,7 @@ class OperFilter: NSObject {                        // object class for base ele
     var expression: String = ""
     var format: String = ""
     var color: String = ""
+    var tag: String=""
     
     override init() {
         super.init()
@@ -96,6 +97,11 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
             if let color = attributeDict["color"] as? NSString {
                 if let item = self.currentItem? {
                     item.color = color
+                }
+            }
+            if let tag = attributeDict["tag"] as? NSString {
+                if let item = self.currentItem? {
+                    item.tag = tag
                 }
             }
             self.storingCharacters = true

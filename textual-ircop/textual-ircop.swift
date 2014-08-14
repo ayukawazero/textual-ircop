@@ -50,21 +50,30 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     let dataFile = NSHomeDirectory().stringByAppendingPathComponent("Documents/dalnet-filters.xml");
     
     var filterArray: [OperFilter] = []
-    @IBOutlet var ourView:NSView! = NSView()
+
+    @IBOutlet var ourView: NSView!
     
     
     /*
-        This SHOULD add the config window to the Textual preferences pane.
-        ..it doesn't.
+        Loads the .xib file for the preferences pane as part of the init function.
     */
-    func pluginPreferencesPaneView() -> (NSView)
-    {
-        if (self.ourView == nil) {
-            if (NSBundle.mainBundle().loadNibNamed("ircop-filters-config", owner: self, topLevelObjects: nil) == nil) {
-                NSLog("Unable to open preference pane")
+    override init() {
+        super.init()
+        if self != nil {
+            if (NSBundle(forClass: TPI_IRCopPlugin.self).loadNibNamed("ircop-filters-config", owner: self, topLevelObjects: nil) == false)
+            {
+                NSLog("TPI_IRCopPlugin: Failed to load view.")
             }
         }
-        return self.ourView;
+    }
+    
+    
+    /*
+        Returns the instance of our preference pane view.
+    */
+    func pluginPreferencesPaneView() ->(NSView)
+    {
+        return self.ourView!
     }
     
     
@@ -75,7 +84,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     {
         return "IRCop Extensions"
     }
-    
+
    
     /* 
         Open and parse the XML configuration file, placing the results into filterArray
@@ -99,44 +108,13 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
             writeToWindow(client,text:"Expression: \(of.expression)")
         }
     }
-    
-   /*
-    - (NSView *)pluginPreferencesPaneView
-    {
-    if (self.ourView == nil) {
-    if ([NSBundle loadNibNamed:@"PreferencePane" owner:self] == NO) {
-    NSLog(@"TPI_PrefsTest: Failed to load view.");
-    }
-    }
-    
-    return self.ourView;
-    }
-    
-    - (NSString *)pluginPreferencesPaneMenuItemName
-    {
-    return @"My Test Plugin";
-    }*/
-    
-    /*
-    
-    func pluginSupportsServerInputCommands() -> (NSArray)
-    {
-        //We're accepting incoming data for NOTICE.  Not sure if this is needed with the intercept call.
-        
-        /* Accept all incoming server data corresponding to the
-        commands PRIVMSG and NOTICE. The plugin will perform
-        different actions for each value. */
-        
-        return ["notice"]
-    }*/
-    
+
+
     
     /*
         Creates the @Operator window for us to send messages to.
     */
     func buildOperatorWindow(client :IRCClient) {
-        //client.findChannelOrCreate("@Operator",isPrivateMessage:true)
-        
         worldController().createPrivateMessage("@Operator", client: client)
     }
     
@@ -175,6 +153,8 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
                     if var matches = messageRecieved =~ of.expression {
                         if isEnabled == "halt" { return nil }
                         
+                        let formattedTag = "[-\u{0003}\(of.color)\(of.tag)\u{0003}-] \u{0003}\(of.color)"
+                        
                         var formattedString = of.format;//result;
                         for i in 0..<matches.count {
                             formattedString = formattedString.stringByReplacingOccurrencesOfString("@M_\(i)@", withString: matches[i], options: NSStringCompareOptions.CaseInsensitiveSearch, range: nil)
@@ -187,7 +167,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
                             formattedString = formattedString.stringByReplacingOccurrencesOfString(at, withString:uc, options: NSStringCompareOptions.LiteralSearch, range:nil)
                         }
                         
-                        self.writeToWindow(client, text: formattedString)
+                        self.writeToWindow(client, text: formattedTag+formattedString)
                         
                         return nil; //We've handled the notice, Textual doesn't need to process it further.
                     }
@@ -216,7 +196,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     */
     func pluginSupportsUserInputCommands() -> (NSArray)
     {
-        return ["RELOADFILTERS","SHOWFILTERS"]
+        return ["RELOADFILTERS","SHOWFILTERS","LOCOPS"]
     }
     
     
@@ -231,6 +211,12 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
                 self.loadFilterSet(client);
             case "SHOWFILTERS":
                 self.showFilters(client);
+            case "LOCOPS":
+                client.sendLine("locops :\(message)")
+            case "GLOBOPS":
+                client.sendLine("globops :\(message)")
+            case "CHATOPS":
+                client.sendLine("chatops :\(message)")
             default:
                 return;
         }
