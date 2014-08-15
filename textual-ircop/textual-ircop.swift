@@ -50,46 +50,11 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     
     
     let dataPath = TPCPathInfo.customExtensionFolderPath()
-    let dataFile = ("dalnet-filters.xml")
+    let dataFile = ("ircop-filters.xml")
     
     var filterArray: [OperFilter] = []
 
-    @IBOutlet var ourView: NSView!
     
-    
-    /*
-        Loads the .xib file for the preferences pane as part of the init function.
-    */
-    override init() {
-        super.init()
-        if self != nil {
-            if (NSBundle(forClass: TPI_IRCopPlugin.self).loadNibNamed("ircop-filters-config", owner: self, topLevelObjects: nil) == false)
-            {
-                NSLog("TPI_IRCopPlugin: Failed to load view.")
-            }
-        }
-    }
-    
-    
-    /*
-        Returns the instance of our preference pane view.
-    */
-    func pluginPreferencesPaneView() ->(NSView)
-    {
-        if (self.ourView == nil) { return NSView() }
-        else { return self.ourView! }
-    }
-    
-    
-    /*
-        Add the plugin's preferences sheet to Textual's config pane list.
-    */
-    func pluginPreferencesPaneMenuItemName() ->(NSString)
-    {
-        return "IRCop Extensions"
-    }
-
-   
     /* 
         Open and parse the XML configuration file, placing the results into filterArray
     */
