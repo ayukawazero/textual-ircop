@@ -1,6 +1,19 @@
+//
+//  operfilter.swift
+//  textual-ircop
+//
+//  Modified for textual-ircop by Jeffrey Clark on 8/6/14.
+//
+//
+//  Based on a modified SwiftXMLParser
+//
+//  Created by Steven Syrek on 7/24/14.
+//  Copyright (c) 2014 Steven Syrek. All rights reserved.
+//
+//  https://github.com/sjsyrek/SwiftXMLParserExample
 
 
-class OperFilter: NSObject {                        // object class for base element in XML file after root
+class OperFilter: NSObject {
     
     var enabled: String = ""
     var expression: String = ""
@@ -12,8 +25,6 @@ class OperFilter: NSObject {                        // object class for base ele
         super.init()
     }
 }
-
-// MARK: - SwiftXMLParser
 
 class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     
@@ -134,9 +145,6 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     }
     
     func parser(parser: NSXMLParser!, parseErrorOccurred parseError: NSError!) {
-        // NSLog(parseError.localizedFailureReason)
-        //NSLog(parseError.localizedDescription)
-        // other error handling (see http://nomothetis.svbtle.com/error-handling-in-swift)
     }
     
 }
