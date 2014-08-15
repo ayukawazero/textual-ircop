@@ -43,12 +43,6 @@ func =~ (input: String, pattern: String) -> [String]? {
 
 class TPI_IRCopPlugin: NSObject, THOPluginProtocol
 {
-    /*
-        TODO: I dislike how this file/path is hardcoded and named.  I'd like to get more elaborate
-        in the future.  Possibly support multiple filter files, configured through the GUI.  Maybe.
-    */
-    
-    
     let dataPath = TPCPathInfo.customExtensionFolderPath()
     let dataFile = ("ircop-filters.xml")
     
