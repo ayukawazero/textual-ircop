@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<filters>
+    <!-- Client connect/disconnect (umode +c) notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* Client -- Client connecting: (.*)</expression>
+        <format color="2" tag="C">Connecting: @M_1@</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Client -- Client exiting: (.*)</expression>
+        <format color="2" tag="C">Disconnecting: @M_1@</format>
+    </filter>
+
+    <!-- Debugging (umode +d) notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* Debug -- (.*)</expression>
+        <format color="3" tag="D">@M_1@</format>
+    </filter>
+
+    <!-- AutoKill notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* Global -- from (OperServ|OperServ2): akill for (\S+!\S+@\S+) by (\S+) affects (\S+) (user|users) \((\S+)\) for (\d+) minutes.</expression>
+        <format color="4" tag="K">Autokill: @M_3@ -> @M_2@ Users: @M_4@ (@M_7@ minutes)</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Global -- from (OperServ|OperServ2): akill for (\S+!\S+@\S+) by (\S+) affects (\S+) (user|users) \((\S+)\) \(permanent\)</expression>
+        <format color="4" tag="K">Autokill: @M_3@ -> @M_2@ Users: @M_4@ (Permanent)</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Global -- from OperServ: (\S+) has autokilled (\d+) hosts for (\S+) \(id: (\S+)\). Affected (\d+) (user|users) (\S+).</expression>
+        <format color="4" tag="K">Autokill: @M_1@ -> @M_2@ Hosts Users: @M_5@ ID: @M_4@</format>
+    </filter>
+    <filter enabled="halt">
+        <expression>\*\*\* Global -- from OperServ: (\S+) removed autokill (\S+!\S+@\S+)</expression>
+        <format color="11" tag="K">Autokill Removed: @M_1@ -> @M_2@</format>
+    </filter>
+
+
+    <!-- Local server notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* Notice -- (\S+) \((\S+!\S+@\S+)\) is now operator \(O\)</expression>
+        <format color="5" tag="O">Opered: @M_1@ (@M_2@)</format>
+    </filter>
+
+
+    <!-- Server kill notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* Notice -- Received KILL message for (\S+!\S+@\S+). From (\S+) Path: (\S+) \((.*)\)</expression>
+        <format color="1" tag="K">Kill: @M_2@ -> @M_1@ (@M_4@)</format>
+    </filter>
+
+
+    <!-- Routing information (umode +n) notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): Remote CONNECT (\S+).(\S+) (\d+) from (\S+)</expression>
+        <format color="7" tag="R">Connect: @M_1@.* -> @M_3@.* (Port @M_5@) by @M_6@</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): Connect error to (\S+).(\S+) (.*)</expression>
+        <format color="7" tag="R">Connect Error: @M_1@.* -> @M_3@.* @M_5@</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): Link with (\S+).(\S+) established: TS link</expression>
+        <format color="7" tag="R">Link Established: @M_1@.* -> @M_3@.* (TS Link)</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): Connect burst to (\S+).(\S+): (\d+) bytes normal, (\d+) compressed \((\S+)\)</expression>
+        <format color="7" tag="R">Connect Burst: @M_1@.* -> @M_3@.* @M_5@b normal, @M_6@b compressed (@M_7@)</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): (\S+).(\S+) has synced to network data.</expression>
+        <format color="7" tag="R">Synchronized: @M_1@.* &#60;--&#62; @M_3@.*</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): synch to (\S+).(\S+) in (\d+) secs at (\d+) sendq</expression>
+        <format color="7" tag="R">Synchronized: @M_1@.* -> @M_3@.* (@M_5@ secs - @M_6@ sendq)</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): No response from (\S+).(\S+), closing link</expression>
+        <format color="7" tag="R">Closing Link: @M_1@.* -> @M_3@.* (No Reponse)</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): Read error from (\S+).(\S+), closing link (.*)</expression>
+        <format color="7" tag="R">Closing Link: @M_1@.* -> @M_3@.* @M_5@</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): Input from (\S+).(\S+) is now compressed</expression>
+        <format color="7" tag="R">Compressed: @M_3@.* -> @M_1@.*</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Routing -- from (\S+).(\S+): (\S+).(\S+) has synched to network data.</expression>
+        <format color="7" tag="R">Synchronized: @M_1@.* -> @M_3@.*</format>
+    </filter>
+
+    <!-- IRCop communications notices -->
+    <filter enabled="yes">
+        <expression>\*\*\* ChatOps -- from (\S+): (.*)</expression>
+        <format color="6" tag="C">&#60;@M_1@&#62; @M_2@</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* LocOps -- from (\S+): (.*)</expression>
+        <format color="3" tag="L">&#60;@M_1@&#62; @M_2@</format>
+    </filter>
+    <filter enabled="yes">
+        <expression>\*\*\* Global -- from (\S+): (.*)</expression>
+        <format color="6" tag="G">&#60;@M_1@&#62; @M_2@</format>
+    </filter>
+
+
+</filters>

@@ -159,7 +159,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     */
     func pluginSupportsUserInputCommands() -> (NSArray)
     {
-        return ["RELOADFILTERS","SHOWFILTERS","LOCOPS"]
+        return ["RELOADFILTERS","SHOWFILTERS","LOCOPS","GLOBOPS","CHATOPS"]
     }
     
     

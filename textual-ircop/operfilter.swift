@@ -5,9 +5,7 @@
 //  Modified for textual-ircop by Jeffrey Clark on 8/6/14.
 //
 //
-//  Based on a modified SwiftXMLParser
-//
-//  Created by Steven Syrek on 7/24/14.
+//  SwiftXMLParser Created by Steven Syrek on 7/24/14.
 //  Copyright (c) 2014 Steven Syrek. All rights reserved.
 //
 //  https://github.com/sjsyrek/SwiftXMLParserExample
