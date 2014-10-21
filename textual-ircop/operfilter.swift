@@ -41,7 +41,7 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     }
     
     init(fromFileAtPath path: String!) {            // initialize with path to a valid XML file
-        self.XMLfile = NSInputStream(fileAtPath: path)
+        self.XMLfile = NSInputStream(fileAtPath: path)!
         self.parser = NSXMLParser(stream: XMLfile)
         super.init()
     }

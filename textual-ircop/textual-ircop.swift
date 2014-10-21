@@ -15,10 +15,11 @@ infix operator =~ {}
 func =~ (input: String, pattern: String) -> [String]? {
     let regex = NSRegularExpression(pattern: pattern, options: .CaseInsensitive, error: nil)
     
-    let results = regex.matchesInString(input,
+    
+    let results = regex?.matchesInString(input,
         options: nil,
         range: NSMakeRange(0, countElements(input))
-        )! as [NSTextCheckingResult]
+        ) as [NSTextCheckingResult]
     
     if (results.count > 0) {
         var values:Array<String> = []
@@ -147,8 +148,10 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     func writeToWindow(client: IRCClient, text: String)
     {
         if (client.findChannel("@Operator") == nil) { self.buildOperatorWindow(client) }
-        
-        client.iomt().print(client.findChannel("@Operator"), type:TVCLogLineDebugType, nickname:nil, messageBody: text, command: TVCLogLineDefaultRawCommandValue)
+
+        self.performBlockOnMainThread({
+            client.print(client.findChannel("@Operator"), type:TVCLogLineDebugType, nickname:nil, messageBody: text, command: TVCLogLineDefaultRawCommandValue)
+        })
         client.findChannel("@Operator").treeUnreadCount++
     }
     
