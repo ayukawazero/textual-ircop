@@ -5,6 +5,8 @@
 //  Created by Jeffrey Clark on 8/6/14.
 //  Copyright (c) 2014 Jeffrey Clark. All rights reserved.
 //
+//
+// Revision 10/6/15 -
 
 import Foundation
 
@@ -28,8 +30,8 @@ func =~ (input: String, pattern: String) -> [String]? {
             for i in 0..<result.numberOfRanges {
                 let range = result.rangeAtIndex(i)
                 
-                let loc = (input.string as NSString).substringFromIndex(range.location)
-                values.append((loc.string as NSString).substringToIndex(range.length))
+                let loc = (input/*.string*/ as NSString).substringFromIndex(range.location)
+                values.append((loc/*.string*/ as NSString).substringToIndex(range.length))
                 
             }
             
@@ -50,15 +52,17 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     var filterArray: [OperFilter] = []
 
     
+    
+    
     /* 
         Open and parse the XML configuration file, placing the results into filterArray
     */
     func loadFilterSet(client :IRCClient) {
+
         let filterParser = SwiftXMLParser(fromFileAtPath: "\(dataPath)/\(dataFile)")
         
         filterParser.start()
         filterArray = filterParser.getParsedItems()
-        
         self.writeToWindow(client, text: "Loaded \(filterArray.count) filters in \(filterParser.getLastDuration()) seconds.")
 
     }
@@ -79,7 +83,9 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         Creates the @Operator window for us to send messages to.
     */
     func buildOperatorWindow(client :IRCClient) {
-        worldController().createPrivateMessage("@Operator", client: client)
+        self.performBlockOnMainThread({
+            var myWin = client.findChannelOrCreate("@Operator",isPrivateMessage: true);
+        });
     }
     
     
@@ -147,12 +153,11 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     */
     func writeToWindow(client: IRCClient, text: String)
     {
-        if (client.findChannel("@Operator") == nil) { self.buildOperatorWindow(client) }
+        var myWin = client.findChannel("@Operator");
+        if (myWin == nil) { self.buildOperatorWindow(client); myWin = client.findChannel("@Operator"); }
 
-        self.performBlockOnMainThread({
-            client.print(client.findChannel("@Operator"), type:TVCLogLineDebugType, nickname:nil, messageBody: text, command: TVCLogLineDefaultRawCommandValue)
-        })
-        client.findChannel("@Operator").treeUnreadCount++
+        client.printDebugInformation(text, channel: myWin)
+        myWin.treeUnreadCount++;
     }
     
     
@@ -160,29 +165,29 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
         Returns an array of user commands supported, expecting all caps.  
         These commands will show in the plugin dialog.
     */
-    func pluginSupportsUserInputCommands() -> (NSArray)
-    {
-        return ["RELOADFILTERS","SHOWFILTERS","LOCOPS","GLOBOPS","CHATOPS"]
+    var subscribedUserInputCommands: [AnyObject]! {
+        get {
+            return ["reloadfilters","showfilters","locops","globops","chatops"];
+        }
     }
-    
     
     /*
         Handles user commands supported by the plugin.
-        Deprecated: Should be replaced with userInputCommandInvokedOnClient
     */
-    func messageSentByUser(client: IRCClient, message: String, command: String)
-    {
-        switch (command) {
+    
+    func userInputCommandInvokedOnClient(client: IRCClient!, commandString: String!, messageString: String!) {
+        switch (commandString) {
+
             case "RELOADFILTERS":
                 self.loadFilterSet(client);
             case "SHOWFILTERS":
                 self.showFilters(client);
             case "LOCOPS":
-                client.sendLine("locops :\(message)")
+                client.sendLine("locops :\(messageString)")
             case "GLOBOPS":
-                client.sendLine("globops :\(message)")
+                client.sendLine("globops :\(messageString)")
             case "CHATOPS":
-                client.sendLine("chatops :\(message)")
+                client.sendLine("chatops :\(messageString)")
             default:
                 return;
         }
