@@ -15,13 +15,13 @@ import Foundation
 infix operator =~ {}
 
 func =~ (input: String, pattern: String) -> [String]? {
-    let regex = NSRegularExpression(pattern: pattern, options: .CaseInsensitive, error: nil)
+    let regex = try? NSRegularExpression(pattern: pattern, options: .CaseInsensitive)
     
     
     let results = regex?.matchesInString(input,
-        options: nil,
-        range: NSMakeRange(0, countElements(input))
-        ) as [NSTextCheckingResult]
+        options: [],
+        range: NSMakeRange(0, input.characters.count)
+        ) as [NSTextCheckingResult]!
     
     if (results.count > 0) {
         var values:Array<String> = []
@@ -84,7 +84,7 @@ class TPI_IRCopPlugin: NSObject, THOPluginProtocol
     */
     func buildOperatorWindow(client :IRCClient) {
         self.performBlockOnMainThread({
-            var myWin = client.findChannelOrCreate("@Operator",isPrivateMessage: true);
+            client.findChannelOrCreate("@Operator",isPrivateMessage: true);
         });
     }
     

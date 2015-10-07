@@ -56,10 +56,10 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     
     func displayItems() {
         for item in self.parsedItems {
-            println("enabled: \(item.enabled)")
-            println("expression: \(item.expression)")
-            println("format: \(item.format)")
-            println("color: \(item.color)")
+            print("enabled: \(item.enabled)")
+            print("expression: \(item.expression)")
+            print("format: \(item.format)")
+            print("color: \(item.color)")
         }
     }
     
@@ -91,26 +91,26 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
         self.lastDuration = NSDate.timeIntervalSinceReferenceDate() - startTime
     }
     
-    func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [NSObject : AnyObject]!) {
+    func parser(parser: NSXMLParser!, didStartElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!, attributes attributeDict: [String : String]!) {
 
         if elementName == "filter" {
             currentItem = OperFilter()
             if let enabled = attributeDict["enabled"] as? NSString {
-                if let item = currentItem? {
-                    item.enabled = enabled //NSString(enabled! as NSString)           // do I need all this optional unwrapping?
+                if let item = currentItem {
+                    item.enabled = enabled as String //NSString(enabled! as NSString)           // do I need all this optional unwrapping?
                 }
             }
             
         } else if elementName == "format" {
             currentString = ""
             if let color = attributeDict["color"] as? NSString {
-                if let item = self.currentItem? {
-                    item.color = color
+                if let item = self.currentItem {
+                    item.color = color as String
                 }
             }
             if let tag = attributeDict["tag"] as? NSString {
-                if let item = self.currentItem? {
-                    item.tag = tag
+                if let item = self.currentItem {
+                    item.tag = tag as String
                 }
             }
             self.storingCharacters = true
@@ -123,7 +123,7 @@ class SwiftXMLParser: NSObject, NSXMLParserDelegate {
     
     func parser(parser: NSXMLParser!, didEndElement elementName: String!, namespaceURI: String!, qualifiedName qName: String!) {
         
-        if let item = currentItem? {                            // I would like to make an abstract version of this
+        if let item = currentItem {                            // I would like to make an abstract version of this
             if elementName == "filter" {
                 finishedCurrentItem()
             } else if elementName == "expression" {
