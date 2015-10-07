@@ -2,6 +2,7 @@ textual-ircop
 =============
 
 IRCop Enhancements for Textual 5
+
 Copyright (c) 2015 Jeffrey Clark
 
 
