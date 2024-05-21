@@ -5,7 +5,7 @@ IRCop Enhancements for Textual 5
 
 Copyright (c) 2015 Jeffrey Clark
 
-
+*** This project should be considered abandoned. ***
 
 Usage:
     Copy the bundle and .XML files into your Textual 5 extensions
